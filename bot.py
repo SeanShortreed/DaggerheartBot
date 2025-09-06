@@ -34,6 +34,7 @@ if not TOKEN:
     logging.error("DISCORD_BOT_TOKEN not found!")
     sys.exit(1)
 
+
 class ForumBot(commands.Bot):
     def __init__(self):
         intents = discord.Intents.default()
@@ -41,12 +42,7 @@ class ForumBot(commands.Bot):
         super().__init__(command_prefix='!', intents=intents)
 
     async def setup_hook(self):
-        # Add commands to tree
-        self.tree.add_command(self.add_tags_cmd)
-        self.tree.add_command(self.add_posts_cmd)
-        self.tree.add_command(self.list_tags_cmd)  # This one stays public
-        self.tree.add_command(self.delete_posts_cmd)
-        
+        # Sync commands to guild
         guild = discord.Object(id=GUILD_ID)
         self.tree.copy_global_to(guild=guild)
         await self.tree.sync(guild=guild)
@@ -73,7 +69,7 @@ class ForumBot(commands.Bot):
 
     # Admin-only with custom permissions
     @app_commands.command(name="delete-posts", description="Delete all bot-created forum posts")
-    @app_commands.default_permissions(manage_messages=True)  # Or any specific permission
+    @app_commands.default_permissions(manage_messages=True)
     async def delete_posts_cmd(self, interaction: discord.Interaction):
         await interaction.response.send_message('🗑️ Searching for bot-created forum posts...')
         await self.delete_bot_posts(interaction)
@@ -82,6 +78,10 @@ class ForumBot(commands.Bot):
         guild = self.get_guild(GUILD_ID)
         forum_channel = guild.get_channel(FORUM_CHANNEL_ID)
         
+        if not forum_channel:
+            await interaction.followup.send("❌ Could not find forum channel!")
+            return
+            
         existing_tag_names = {tag.name.lower() for tag in forum_channel.available_tags}
         
         new_tags = []
@@ -114,6 +114,10 @@ class ForumBot(commands.Bot):
     async def list_available_tags(self, interaction):
         guild = self.get_guild(GUILD_ID)
         forum_channel = guild.get_channel(FORUM_CHANNEL_ID)
+        
+        if not forum_channel:
+            await interaction.followup.send("❌ Could not find forum channel!")
+            return
         
         response = f"📋 **Available tags in '{forum_channel.name}':**\n\n"
         
