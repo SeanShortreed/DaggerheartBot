@@ -3,20 +3,36 @@ from discord.ext import commands
 from discord import app_commands
 import asyncio
 import os
+import sys
+import logging
+from pathlib import Path
 from dotenv import load_dotenv
+
+# Setup logging
+log_dir = Path('/logs')
+if not log_dir.exists():
+    log_dir = Path('logs')
+    log_dir.mkdir(exist_ok=True)
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler(log_dir / 'bot.log'),
+        logging.StreamHandler()
+    ]
+)
 
 # Load environment variables
 load_dotenv()
 
-# Import data from separate files
-from tags_data import TAGS_TO_CREATE
-from posts_data import posts_data
-
-# Get configuration from environment
 TOKEN = os.getenv('DISCORD_BOT_TOKEN')
-GUILD_ID = int(os.getenv('GUILD_ID'))
-FORUM_CHANNEL_ID = int(os.getenv('FORUM_CHANNEL_ID'))
+GUILD_ID = int(os.getenv('GUILD_ID', 0))
+FORUM_CHANNEL_ID = int(os.getenv('FORUM_CHANNEL_ID', 0))
 
+if not TOKEN:
+    logging.error("DISCORD_BOT_TOKEN not found!")
+    sys.exit(1)
 
 class ForumBot(commands.Bot):
     def __init__(self):

@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>DaggerheartBot</Name>
+  <Repository>seanshortreed/daggerheartbot</Repository>
+  <Registry>https://hub.docker.com/r/seanshortreed/daggerheartbot</Registry>
+  <Network>bridge</Network>
+  <MyIP/>
+  <Shell>bash</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/seanshortreed/daggerheartbot/issues</Support>
+  <Project>https://github.com/seanshortreed/daggerheartbot</Project>
+  <Overview>Discord bot for automated forum channel management.&#xD;
+&#xD;
+Features:&#xD;
+- Create and manage forum tags&#xD;
+- Bulk create forum posts with tags&#xD;
+- Delete bot-created posts&#xD;
+- Admin-only slash commands&#xD;
+- Automatic tag assignment&#xD;
+&#xD;
+Setup Instructions:&#xD;
+1. Create a Discord bot at https://discord.com/developers/applications&#xD;
+2. Copy your bot token&#xD;
+3. Enable Developer Mode in Discord (Settings → Advanced)&#xD;
+4. Right-click your server name → Copy Server ID (this is Guild ID)&#xD;
+5. Right-click your forum channel → Copy Channel ID&#xD;
+6. Enter these values below and start the container&#xD;
+&#xD;
+Commands:&#xD;
+/add-tags - Create forum tags (Admin only)&#xD;
+/add-posts - Create forum posts (Admin only)&#xD;
+/list-tags - Show available tags (Public)&#xD;
+/delete-posts - Delete bot posts (Admin only)</Overview>
+  <Category>Tools: Other:</Category>
+  <WebUI/>
+  <TemplateURL>https://raw.githubusercontent.com/seanshortreed/daggerheartbot/main/unraid/daggerheartbot.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/discord.png</Icon>
+  <ExtraParams>--restart=unless-stopped</ExtraParams>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled></DateInstalled>
+  <DonateText>Buy me a coffee</DonateText>
+  <DonateLink>https://www.buymeacoffee.com/seanshortreed</DonateLink>
+  <Requires/>
+  <Config Name="Discord Bot Token" Target="DISCORD_BOT_TOKEN" Default="" Mode="" Description="Your Discord bot token from https://discord.com/developers/applications" Type="Variable" Display="always" Required="true" Mask="true">YOUR_BOT_TOKEN_HERE</Config>
+  <Config Name="Discord Server (Guild) ID" Target="GUILD_ID" Default="" Mode="" Description="Your Discord server ID (Enable Developer Mode, right-click server name, Copy ID)" Type="Variable" Display="always" Required="true" Mask="false">1363547446294089758</Config>
+  <Config Name="Forum Channel ID" Target="FORUM_CHANNEL_ID" Default="" Mode="" Description="The forum channel ID (right-click the forum channel, Copy ID)" Type="Variable" Display="always" Required="true" Mask="false">1413909649958240367</Config>
+  <Config Name="Config Storage Path" Target="/config" Default="/mnt/user/appdata/discord-forum-bot" Mode="rw" Description="Configuration storage location" Type="Path" Display="advanced" Required="true" Mask="false">/mnt/user/appdata/discord-forum-bot</Config>
+  <Config Name="Logs Storage Path" Target="/logs" Default="/mnt/user/appdata/discord-forum-bot/logs" Mode="rw" Description="Log files location" Type="Path" Display="always" Required="false" Mask="false">/mnt/user/appdata/discord-forum-bot/logs</Config>
+  <Config Name="Data Storage Path" Target="/data" Default="/mnt/user/appdata/discord-forum-bot/data" Mode="rw" Description="Persistent data storage" Type="Path" Display="always" Required="false" Mask="false">/mnt/user/appdata/discord-forum-bot/data</Config>
+  <Config Name="Container Timezone" Target="TZ" Default="America/New_York" Mode="" Description="Set your timezone for logs (e.g., America/New_York, Europe/London)" Type="Variable" Display="advanced" Required="false" Mask="false">America/New_York</Config>
+  <Config Name="PUID" Target="PUID" Default="99" Mode="" Description="User ID" Type="Variable" Display="advanced" Required="false" Mask="false">99</Config>
+  <Config Name="PGID" Target="PGID" Default="100" Mode="" Description="Group ID" Type="Variable" Display="advanced" Required="false" Mask="false">100</Config>
+</Container>

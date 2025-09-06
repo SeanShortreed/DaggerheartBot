@@ -1,0 +1,30 @@
+FROM python:3.11-slim
+
+# Build arguments
+ARG GITHUB_REPO="https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git"
+ARG BRANCH="main"
+
+# Install git
+RUN apt-get update && apt-get install -y git && apt-get clean
+
+WORKDIR /app
+
+# Clone repository
+RUN git clone ${GITHUB_REPO} . && \
+    git checkout ${BRANCH}
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Create necessary directories
+RUN mkdir -p logs data
+
+# Create update script
+RUN echo '#!/bin/bash\n\
+cd /app\n\
+git pull origin main\n\
+pip install -r requirements.txt\n\
+echo "Update complete. Please restart container."' > /app/update.sh && \
+    chmod +x /app/update.sh
+
+CMD ["python", "-u", "bot.py"]
